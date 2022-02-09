@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 extension Drawer {
-    func rest(in positions: [CGFloat]) -> Drawer {
+    public func rest(in positions: [CGFloat]) -> Drawer {
         Drawer(content: content,
                snapPositions: positions,
                lastDragPosition: lastDragPosition,
