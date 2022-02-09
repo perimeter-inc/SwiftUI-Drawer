@@ -1,3 +1,3 @@
 # SwiftUI-Drawer
 
-A description of this package.
+A bottom-up drawer view.

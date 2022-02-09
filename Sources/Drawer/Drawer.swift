@@ -8,13 +8,13 @@
 import Foundation
 import SwiftUI
 
-/// A bottom drawer view
+/// A bottom-up drawer view
 public struct Drawer<Content>: View where Content: View {
 
 
     var content: Content
     ///partial height that the drawer can snap to
-    public var snapPositions: [CGFloat] = [
+    var snapPositions: [CGFloat] = [
         0,
         UIScreen.main.bounds.height - 135
     ]
@@ -58,7 +58,7 @@ struct DrawerPreviews: PreviewProvider {
 extension Drawer {
     /// A bottom-up drawer view
     /// - Parameters:
-    init(@ViewBuilder _ content: () -> Content) {
+    public init(@ViewBuilder _ content: () -> Content) {
         self.content = content()
     }
 }
