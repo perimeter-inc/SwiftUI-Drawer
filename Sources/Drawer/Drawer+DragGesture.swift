@@ -17,9 +17,7 @@ extension Drawer {
     }
 
     func dragChanged(_ value: DragGesture.Value) {
-        let newPosition = lastDragPosition + value.translation.height
-
-        guard newPosition > 0 else { return }
+        let newPosition = lastDragPosition - value.translation.height
         
         animation = .none
         currentPosition = newPosition
@@ -27,21 +25,11 @@ extension Drawer {
 
     func dragEnded(_ value: DragGesture.Value) {
         let newPosition =
-            lastDragPosition + value.predictedEndTranslation.height
+            lastDragPosition - value.predictedEndTranslation.height
 
         animation = .spring()
-        snap(with: newPosition)
+        currentPosition = nearest(of: newPosition)
         lastDragPosition = currentPosition
-    }
-
-    func snap(with position: CGFloat) {
-        currentPosition = nearest(of: position)
-    }
-
-    func nearest(of value: CGFloat) -> CGFloat {
-        snapPositions
-            .sorted { abs($0 - value) < abs($1 - value) }
-            .first!
     }
 }
 
@@ -49,9 +37,12 @@ struct DrawerGesturePreviews: PreviewProvider {
     static var previews: some View {
         ZStack {
             Color.gray
-            Drawer {
-                Color.blue
+            GeometryReader { g in
+                Drawer {
+                    Color.blue
+                }.rest(in: [123, g.size.height])
             }
         }
+        .edgesIgnoringSafeArea(.vertical)
     }
 }
