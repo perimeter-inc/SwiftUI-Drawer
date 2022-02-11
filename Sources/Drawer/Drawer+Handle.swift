@@ -12,27 +12,19 @@ extension Drawer {
     func offset(with geometry: GeometryProxy) -> CGFloat {
         let ans = geometry.size.height - currentPosition
 
-        let maxPosition = geometry.size.height // bottom
-        let minPosition = 0.0 // top
+        let maxOffset = geometry.size.height
+        let minOffset = 0.0
 
-        guard ans < maxPosition else { return maxPosition } // handle must stay within safe area insets
-        guard ans >= minPosition else { return minPosition }
-
-        return ans
+        return min(max(ans,minOffset), maxOffset)
     }
 
     func handleOffset(with geometry: GeometryProxy) -> CGFloat {
         let ans = geometry.size.height - currentPosition + handleOffsetFromDrawer
 
-        let maxPosition = geometry.size.height // bottom
-        let minPosition = handleMaxPosition
+        let maxOffset = geometry.size.height
+        let minOffset = handleMaxPosition
 
-        debugText = "handle max = \(maxPosition)"
-
-        guard ans < maxPosition else { return maxPosition } // handle must stay within safe area insets
-        guard ans >= minPosition else { return minPosition }
-
-        return ans
+        return min(max(ans,minOffset), maxOffset)
     }
     
 }
@@ -55,7 +47,7 @@ struct DrawerHandlesPreview: PreviewProvider {
                 }, handle: {
                     DrawerHandles.defaultHandle
                 })
-                    .withHandleOffset(0, and: 54)
+                    .withHandleOffset(13, and: 54)
                     .rest(in: [135, geometry.size.height])
             }
         }.edgesIgnoringSafeArea(.vertical)

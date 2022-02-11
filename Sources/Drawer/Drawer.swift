@@ -8,18 +8,6 @@
 import Foundation
 import SwiftUI
 
-public class DrawerModel: ObservableObject {
-    ///partial height that the drawer can snap to
-    @Published internal var restingPositions: [CGFloat]
-    /// corner radius aplied to drawer's corners
-    @Published internal var cornerRadius: CGFloat
-
-    public init(restingPositions: [CGFloat], cornerRadius: CGFloat) {
-        self._restingPositions = .init(initialValue: restingPositions)
-        self._cornerRadius = .init(initialValue: cornerRadius)
-    }
-}
-
 /// A bottom-up drawer view
 public struct Drawer<Content: View, Handle: View>: View {
 
@@ -67,30 +55,8 @@ public struct Drawer<Content: View, Handle: View>: View {
                     .position(x: geometry.size.width/2,
                               y: handleOffset(with: geometry))
                     .animation(animation)
-                #if DEBUG
-                debugLayer
-                #endif
             }
         }
-        
-    }
-
-    @State var debugText: String = "test"
-
-    var debugLayer: some View {
-        GeometryReader { geometry in
-            VStack {
-                Text("rest: \(restingPositions.description)")
-                Text("position: \(currentPosition)")
-                Text("\(geometry.safeAreaInsets.top)")
-                Text("current offset: \(offset(with:geometry))")
-                Text("current handle offset: \(handleOffset(with:geometry))")
-                Text("next snap: \(nearest(of: currentPosition))")
-                Text(debugText)
-            }
-        }
-        .padding(EdgeInsets(top: 100, leading: 30, bottom: 30, trailing: 30))
-        .foregroundColor(.white)
     }
 }
 
@@ -100,27 +66,15 @@ struct DrawerPreviews: PreviewProvider {
             ZStack {
                 Color.black
                 GeometryReader { geometry in
-                    Drawer ({
+                    Drawer({
                         Color.blue
                     }, handle: {
                         DrawerHandles.defaultHandle
-                    }).rest(in: [135, geometry.size.height])
-                        .withHandleOffset(13, and: 43)
-                        .cornerRadius(16)
+                    })
+                        .withHandleOffset(13, and: 54)
+                        .rest(in: [135, geometry.size.height])
                 }
             }.edgesIgnoringSafeArea(.vertical)
-                .previewDevice("iPhone 13 Pro")
-            ZStack {
-                Color.black
-                GeometryReader { geometry in
-                    Drawer ({
-                        Color.blue
-                    }, handle: {
-                        DrawerHandles.defaultHandle
-                    }).rest(in: [135, geometry.size.height])
-                }
-            }.edgesIgnoringSafeArea(.vertical)
-                .previewDevice("iPhone SE (2nd generation)")
         }
     }
 }
