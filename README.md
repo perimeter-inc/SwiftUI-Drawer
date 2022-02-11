@@ -20,6 +20,8 @@ Add a dependency in your your `Package.swift`
 
 ## Examples
 
+<img src=https://github.com/bwide/SwiftUI-Drawer/blob/main/Media/DrawerNoHandle.gif width=200 align="right" />
+
 Simple Drawer with no handle
 
 ```swift
@@ -33,7 +35,15 @@ Simple Drawer with no handle
         }
     }.edgesIgnoringSafeArea(.vertical)
 ```
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
 
+<img src=https://github.com/bwide/SwiftUI-Drawer/blob/main/Media/Drawer.gif width=200 align="right" />
 Drawer with the default handle
 
 ```swift
@@ -50,6 +60,16 @@ Drawer with the default handle
         }
     }.edgesIgnoringSafeArea(.vertical)
 ```
+
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+
+<img src=https://github.com/bwide/SwiftUI-Drawer/blob/main/Media/DrawerIphoneSE.gif width=200 align="right" />
 
 Drawer with no rounded edges when reaching the top of the screen and a custom handle offset
 
