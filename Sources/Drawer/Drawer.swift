@@ -8,6 +8,18 @@
 import Foundation
 import SwiftUI
 
+public class DrawerModel: ObservableObject {
+    ///partial height that the drawer can snap to
+    @Published internal var restingPositions: [CGFloat]
+    /// corner radius aplied to drawer's corners
+    @Published internal var cornerRadius: CGFloat
+
+    public init(restingPositions: [CGFloat], cornerRadius: CGFloat) {
+        self._restingPositions = .init(initialValue: restingPositions)
+        self._cornerRadius = .init(initialValue: cornerRadius)
+    }
+}
+
 /// A bottom-up drawer view
 public struct Drawer<Content: View, Handle: View>: View {
 
@@ -24,15 +36,19 @@ public struct Drawer<Content: View, Handle: View>: View {
     /// current animation applied to drawer
     @State internal var animation: Animation?
     /// corner radius aplied to drawer's corners
-    @State internal var cornerRadius: CGFloat = 16
+    @Binding internal var cornerRadius: CGFloat
+    /// maximum height for the handle to move to
+    var handleMaxPosition: CGFloat
+    /// offset of handle from the top of the drawer
+    var handleOffsetFromDrawer: CGFloat
+    
+    var willRestAt: ((CGFloat) -> Void)?
+    var onDrag: ((CGFloat) -> Void)?
 
     public var body: some View {
         ZStack {
             Spacer()
             drawer
-            #if DEBUG
-            debugLayer
-            #endif
         }
         .edgesIgnoringSafeArea(.vertical)
     }
@@ -41,46 +57,71 @@ public struct Drawer<Content: View, Handle: View>: View {
         GeometryReader { geometry in
             ZStack {
                 content
-                    .cornerRadius(cornerRadius)
+                    .cornerRadius(cornerRadius, corners: [.topLeft, .topRight])
                     .frame(width: geometry.size.width,
                            height: geometry.size.height)
                     .offset(y: offset(with: geometry))
-                    .animation(animation)
                     .gesture(dragGesture)
-                handle
                     .animation(animation)
+                handle
                     .position(x: geometry.size.width/2,
-                              y: offset(with: geometry))
+                              y: handleOffset(with: geometry))
+                    .animation(animation)
+                #if DEBUG
+                debugLayer
+                #endif
             }
         }
+        
     }
 
-    @State var debugText: String = ""
+    @State var debugText: String = "test"
 
     var debugLayer: some View {
-        VStack {
-            Text("rest: \(restingPositions.description)")
-            Text("position: \(currentPosition)")
-            Text("next snap: \(nearest(of: currentPosition))")
-            Text(debugText)
+        GeometryReader { geometry in
+            VStack {
+                Text("rest: \(restingPositions.description)")
+                Text("position: \(currentPosition)")
+                Text("\(geometry.safeAreaInsets.top)")
+                Text("current offset: \(offset(with:geometry))")
+                Text("current handle offset: \(handleOffset(with:geometry))")
+                Text("next snap: \(nearest(of: currentPosition))")
+                Text(debugText)
+            }
         }
+        .padding(EdgeInsets(top: 100, leading: 30, bottom: 30, trailing: 30))
         .foregroundColor(.white)
     }
 }
 
 struct DrawerPreviews: PreviewProvider {
     static var previews: some View {
-        ZStack {
-            Color.black
-            GeometryReader { geometry in
-                Drawer ({
-                    Color.blue
-                }, handle: {
-                    DrawerHandles.defaultHandle
-                })
-                .rest(in: [135, geometry.size.height])
-            }
-        }.edgesIgnoringSafeArea(.vertical)
+        Group {
+            ZStack {
+                Color.black
+                GeometryReader { geometry in
+                    Drawer ({
+                        Color.blue
+                    }, handle: {
+                        DrawerHandles.defaultHandle
+                    }).rest(in: [135, geometry.size.height])
+                        .withHandleOffset(13, and: 43)
+                        .cornerRadius(16)
+                }
+            }.edgesIgnoringSafeArea(.vertical)
+                .previewDevice("iPhone 13 Pro")
+            ZStack {
+                Color.black
+                GeometryReader { geometry in
+                    Drawer ({
+                        Color.blue
+                    }, handle: {
+                        DrawerHandles.defaultHandle
+                    }).rest(in: [135, geometry.size.height])
+                }
+            }.edgesIgnoringSafeArea(.vertical)
+                .previewDevice("iPhone SE (2nd generation)")
+        }
     }
 }
 
@@ -108,6 +149,9 @@ extension Drawer {
         self._restingPositions = .init(initialValue: restingPositions)
         self._currentPosition = .init(initialValue: restingPositions.first!)
         self._lastDragPosition = .init(initialValue: restingPositions.first!)
+        self._cornerRadius = .constant(16)
+        self.handleMaxPosition = 54
+        self.handleOffsetFromDrawer = 10
     }
 
     /// A bottom-up drawer view with no handle

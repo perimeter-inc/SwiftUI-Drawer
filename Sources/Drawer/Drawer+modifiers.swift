@@ -33,7 +33,46 @@ extension Drawer {
                lastDragPosition: positions.first ?? currentPosition,
                currentPosition: positions.first ?? currentPosition,
                animation: animation,
-               cornerRadius: cornerRadius)
+               cornerRadius: $cornerRadius,
+               handleMaxPosition: handleMaxPosition,
+               handleOffsetFromDrawer: handleOffsetFromDrawer,
+               willRestAt: willRestAt,
+               onDrag: onDrag)
+    }
+
+    /**
+     Adjusts the offset of the handle
+     - Parameter offset: offset between the center of the handle and the top of the drawer
+     - Parameter maxPosition: maximum distance between the centert of the handle and the top of the view (when working without safe area insets)
+
+     - Important:
+        - to use the full height of the display you'll can add `.edgesIgnoringSafeArea(.vertical)`
+     */
+    public func withHandleOffset(_ offset: CGFloat, and maxPosition: CGFloat? = nil) -> Drawer {
+        Drawer(content: content, handle: handle,
+               restingPositions: restingPositions,
+               lastDragPosition: lastDragPosition,
+               currentPosition: currentPosition,
+               animation: animation,
+               cornerRadius: $cornerRadius,
+               handleMaxPosition: maxPosition ?? handleMaxPosition,
+               handleOffsetFromDrawer: offset,
+               willRestAt: willRestAt,
+               onDrag: onDrag)
+    }
+
+
+    public func cornerRadius(_ radius: Binding<CGFloat>) -> Drawer {
+        Drawer(content: content, handle: handle,
+               restingPositions: restingPositions,
+               lastDragPosition: lastDragPosition,
+               currentPosition: currentPosition,
+               animation: animation,
+               cornerRadius: radius,
+               handleMaxPosition: handleMaxPosition,
+               handleOffsetFromDrawer: handleOffsetFromDrawer,
+               willRestAt: willRestAt,
+               onDrag: onDrag)
     }
 
     public func cornerRadius(_ radius: CGFloat) -> Drawer {
@@ -42,19 +81,11 @@ extension Drawer {
                lastDragPosition: lastDragPosition,
                currentPosition: currentPosition,
                animation: animation,
-               cornerRadius: radius)
-    }
-}
-
-public struct DrawerHandles {
-    static var defaultHandle: some View {
-        VStack {
-            Spacer()
-                .frame(height: 16) //
-            RoundedRectangle(cornerRadius: 3)
-                .foregroundColor(.gray.opacity(0.88))
-                .frame(width: 40, height: 6)
-        }
+               cornerRadius: .constant(radius),
+               handleMaxPosition: handleMaxPosition,
+               handleOffsetFromDrawer: handleOffsetFromDrawer,
+               willRestAt: willRestAt,
+               onDrag: onDrag)
     }
 }
 

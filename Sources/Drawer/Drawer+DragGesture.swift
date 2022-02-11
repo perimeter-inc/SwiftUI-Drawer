@@ -18,7 +18,8 @@ extension Drawer {
 
     func dragChanged(_ value: DragGesture.Value) {
         let newPosition = lastDragPosition - value.translation.height
-        
+
+        onDrag?(currentPosition)
         animation = .none
         currentPosition = newPosition
     }
@@ -26,10 +27,24 @@ extension Drawer {
     func dragEnded(_ value: DragGesture.Value) {
         let newPosition =
             lastDragPosition - value.predictedEndTranslation.height
+        let newRestingPosition = nearest(of: newPosition)
 
         animation = .spring()
-        currentPosition = nearest(of: newPosition)
+        currentPosition = newRestingPosition
         lastDragPosition = currentPosition
+        willRestAt?(newRestingPosition)
+    }
+
+    func nearest(of value: CGFloat) -> CGFloat {
+        guard
+            let ans = restingPositions
+                .sorted(by: { abs($0 - value) < abs($1 - value) })
+                .first
+        else {
+            fatalError("drawer needs at least one resting position")
+        }
+
+        return ans
     }
 }
 
