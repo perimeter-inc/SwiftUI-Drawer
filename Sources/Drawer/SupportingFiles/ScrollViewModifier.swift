@@ -22,9 +22,6 @@ struct DrawerScrollViewModifier: ViewModifier {
             .onDragShouldBegin { pan, scrollView in
                 scrollView.contentOffset.y - pan.translation(in: scrollView).y > 0 // disable scrollView when scrolling down drawer
             }
-            .onScroll { scrollView in
-                print(scrollView.contentOffset.y)
-            }
         }
     }
 }
