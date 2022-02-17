@@ -9,24 +9,35 @@ import Foundation
 import SwiftUI
 
 extension Drawer {
-    func offset(with geometry: GeometryProxy) -> CGFloat {
-        let ans = geometry.size.height - currentPosition
-
-        let maxOffset = geometry.size.height
-        let minOffset = 0.0
-
-        return min(max(ans,minOffset), maxOffset)
+    @ViewBuilder
+    func drawerHandle(_ geometry: GeometryProxy) -> some View {
+        ZStack {
+            backgroundColor
+            VStack {
+                Spacer()
+                handle
+                    .frame(height: handleHeight)
+                Spacer()
+                    .frame(height: handlePadding)
+            }
+        }
+        .frame(height: handleViewHeight(with: geometry))
+        .animation(animation)
     }
 
-    func handleOffset(with geometry: GeometryProxy) -> CGFloat {
-        let ans = geometry.size.height - currentPosition + handleOffsetFromDrawer
+    func handleViewHeight(with geometry: GeometryProxy) -> CGFloat {
+        let minHeight: CGFloat = handlePadding * 2
+                                 + handleHeight
 
-        let maxOffset = geometry.size.height
-        let minOffset = handleMaxPosition
+        let maxHeight: CGFloat = safeAreaInsets.top +
+                                 handleHeight +
+                                 handlePadding
 
-        return min(max(ans,minOffset), maxOffset)
+
+        let ans = maxHeight - offset(with: geometry)
+
+        return min(max(ans,minHeight), maxHeight)
     }
-    
 }
 
 public struct DrawerHandles {
@@ -34,22 +45,5 @@ public struct DrawerHandles {
         RoundedRectangle(cornerRadius: 3)
             .foregroundColor(.gray.opacity(0.88))
             .frame(width: 40, height: 6)
-    }
-}
-
-struct DrawerHandlesPreview: PreviewProvider {
-    static var previews: some View {
-        ZStack {
-            Color.black
-            GeometryReader { geometry in
-                Drawer({
-                    Color.blue
-                }, handle: {
-                    DrawerHandles.defaultHandle
-                })
-                    .withHandleOffset(13, and: 54)
-                    .rest(in: [135, geometry.size.height])
-            }
-        }.edgesIgnoringSafeArea(.vertical)
     }
 }

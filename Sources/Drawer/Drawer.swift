@@ -17,6 +17,8 @@ public struct Drawer<Content: View, Handle: View>: View {
 
     ///partial height that the drawer can snap to
     @State internal var restingPositions: [CGFloat]
+    /// positions where the user is enabled to interact with drawer's content
+    @State internal var interactivePositions: [CGFloat]
     /// helper variable for dragging logic
     @State internal var lastDragPosition: CGFloat
     /// The current height of the displayed drawer
@@ -25,57 +27,35 @@ public struct Drawer<Content: View, Handle: View>: View {
     @State internal var animation: Animation?
     /// corner radius aplied to drawer's corners
     @Binding internal var cornerRadius: CGFloat
-    /// maximum height for the handle to move to
-    var handleMaxPosition: CGFloat
-    /// offset of handle from the top of the drawer
-    var handleOffsetFromDrawer: CGFloat
+
+    /// offset set between the handle and the drawer
+    var handlePadding: CGFloat
+    /// height of your handle's content
+    var handleHeight: CGFloat
+    /// background color applied to drawer handle
+    var backgroundColor: Color
     
     var willRestAt: ((CGFloat) -> Void)?
     var onDrag: ((CGFloat) -> Void)?
 
+    @Environment(\.safeAreaInsets) var safeAreaInsets
+
     public var body: some View {
-        ZStack {
-            Spacer()
-            drawer
-        }
-        .edgesIgnoringSafeArea(.vertical)
-    }
-
-    var drawer: some View {
         GeometryReader { geometry in
-            ZStack {
-                content
-                    .cornerRadius(cornerRadius, corners: [.topLeft, .topRight])
-                    .frame(width: geometry.size.width,
-                           height: geometry.size.height)
-                    .offset(y: offset(with: geometry))
-                    .gesture(dragGesture)
-                    .animation(animation)
-                handle
-                    .position(x: geometry.size.width/2,
-                              y: handleOffset(with: geometry))
-                    .animation(animation)
-            }
-        }
-    }
-}
-
-struct DrawerPreviews: PreviewProvider {
-    static var previews: some View {
-        Group {
-            ZStack {
-                Color.black
-                GeometryReader { geometry in
-                    Drawer({
-                        Color.blue
-                    }, handle: {
-                        DrawerHandles.defaultHandle
-                    })
-                        .withHandleOffset(13, and: 54)
-                        .rest(in: [135, geometry.size.height])
+            VStack(spacing: .zero) {
+                drawerHandle(geometry)
+                ZStack {
+                    backgroundColor
+                    content
+                        .disabled(!interactivePositions.contains(currentPosition))
                 }
-            }.edgesIgnoringSafeArea(.vertical)
+            }
+            .cornerRadius(cornerRadius, corners: [.topLeft, .topRight])
+            .offset(y: offset(with: geometry))
+            .simultaneousGesture(dragGesture)
+            .animation(animation)
         }
+            .edgesIgnoringSafeArea(.vertical)
     }
 }
 
@@ -95,17 +75,19 @@ extension Drawer {
      })
      ```
      */
-    public init(restingPositions: [CGFloat] = [0],
+    public init(restingPositions: [CGFloat] = [100],
     @ViewBuilder _ content: () -> Content,
     @ViewBuilder handle: () -> Handle) {
         self.content = content()
         self.handle = handle()
         self._restingPositions = .init(initialValue: restingPositions)
+        self._interactivePositions = .init(initialValue: restingPositions)
         self._currentPosition = .init(initialValue: restingPositions.first!)
         self._lastDragPosition = .init(initialValue: restingPositions.first!)
         self._cornerRadius = .constant(16)
-        self.handleMaxPosition = 54
-        self.handleOffsetFromDrawer = 10
+        self.handlePadding = 10
+        self.handleHeight = 6
+        self.backgroundColor = .clear
     }
 
     /// A bottom-up drawer view with no handle

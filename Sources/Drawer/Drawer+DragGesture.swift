@@ -11,7 +11,7 @@ import SwiftUI
 extension Drawer {
 
     var dragGesture: some Gesture {
-        DragGesture()
+        DragGesture(minimumDistance: 30, coordinateSpace: .local)
             .onChanged { dragChanged($0) }
             .onEnded { dragEnded($0) }
     }
@@ -46,18 +46,13 @@ extension Drawer {
 
         return ans
     }
-}
 
-struct DrawerGesturePreviews: PreviewProvider {
-    static var previews: some View {
-        ZStack {
-            Color.gray
-            GeometryReader { g in
-                Drawer {
-                    Color.blue
-                }.rest(in: [123, g.size.height])
-            }
-        }
-        .edgesIgnoringSafeArea(.vertical)
+    func offset(with geometry: GeometryProxy) -> CGFloat {
+        let ans = geometry.size.height - currentPosition
+
+        let maxOffset = geometry.size.height
+        let minOffset = 0.0
+
+        return min(max(ans,minOffset), maxOffset)
     }
 }

@@ -1,0 +1,16 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "LegacyScrollView",
+        "repositoryURL": "https://github.com/bwide/LegacyScrollView",
+        "state": {
+          "branch": null,
+          "revision": "1cd7f5b3270e7bf8563e052432cbb611c25fbfc7",
+          "version": "0.1.0"
+        }
+      }
+    ]
+  },
+  "version": 1
+}

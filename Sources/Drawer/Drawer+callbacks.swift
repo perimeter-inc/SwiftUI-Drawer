@@ -12,12 +12,14 @@ extension Drawer {
     public func onRest(_ willRestAt: @escaping (CGFloat) -> Void) -> Drawer {
         Drawer(content: content, handle: handle,
                restingPositions: restingPositions,
+               interactivePositions: interactivePositions,
                lastDragPosition: lastDragPosition,
                currentPosition: currentPosition,
                animation: animation,
                cornerRadius: $cornerRadius,
-               handleMaxPosition: handleMaxPosition,
-               handleOffsetFromDrawer: handleOffsetFromDrawer,
+               handlePadding: handlePadding,
+               handleHeight: handleHeight,
+               backgroundColor: backgroundColor,
                willRestAt: willRestAt,
                onDrag: onDrag)
     }
@@ -25,12 +27,14 @@ extension Drawer {
     public func onDrag(_ onDrag: @escaping (CGFloat) -> Void) -> Drawer {
         Drawer(content: content, handle: handle,
                restingPositions: restingPositions,
+               interactivePositions: interactivePositions,
                lastDragPosition: lastDragPosition,
                currentPosition: currentPosition,
                animation: animation,
                cornerRadius: $cornerRadius,
-               handleMaxPosition: handleMaxPosition,
-               handleOffsetFromDrawer: handleOffsetFromDrawer,
+               handlePadding: handlePadding,
+               handleHeight: handleHeight,
+               backgroundColor: backgroundColor,
                willRestAt: willRestAt,
                onDrag: onDrag)
     }
