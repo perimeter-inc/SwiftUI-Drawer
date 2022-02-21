@@ -10,24 +10,18 @@ import SwiftUI
 import Combine
 import LegacyScrollView
 
-struct DrawerScrollViewModifier: ViewModifier {
+public extension View {
+    /**
+     encapsulates your view in a `LegacyScrollView`
 
-    let showsIndicators: Bool
-
-    func body(content: Content) -> some View {
-        GeometryReader { geometry in
-            LegacyScrollView(.vertical, showsIndicators: showsIndicators) {
-                content
-            }
-            .onDragShouldBegin { pan, scrollView in
-                scrollView.contentOffset.y - pan.translation(in: scrollView).y > 0 // disable scrollView when scrolling down drawer
-            }
-        }
+     you can now call `.onScroll(_:)` `.onReachBottom(_:)` and others
+     */
+    func drawerScrollView(showsIndicators: Bool = true) -> LegacyScrollView<Self> {
+        LegacyScrollView(.vertical, showsIndicators: showsIndicators) { self }
+        .onDragShouldBegin(shouldBeginDrag(with:scrollView:))
     }
-}
 
-extension View {
-    func drawerScrollView() -> some View {
-        modifier(DrawerScrollViewModifier(showsIndicators: true))
+    private func shouldBeginDrag(with panGestureRecognizer: UIPanGestureRecognizer, scrollView: UIScrollView) -> Bool {
+        scrollView.contentOffset.y - panGestureRecognizer.translation(in: scrollView).y > 0 // disable scrollView when scrolling down drawer
     }
 }

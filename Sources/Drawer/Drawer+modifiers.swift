@@ -94,6 +94,9 @@ extension Drawer {
 
     /**
      sets drawer content as scrollable.
+
+     you can call `.drawerScrollView()` directly in your content to get access to more LegacyScrollView callbacks
+
      - Important: use this instead of adding a ScrollView to your content to ensure that you'll be able to scroll down the drawer
      */
     public func scrollableContent() -> Drawer<AnyView, Handle> {
