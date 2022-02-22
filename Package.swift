@@ -15,7 +15,7 @@ let package = Package(
             targets: ["Drawer"]),
     ],
     dependencies: [
-        .package(name: "LegacyScrollView", url: "https://github.com/bwide/LegacyScrollView", from: "0.2.0")
+        .package(name: "LegacyScrollView", url: "https://github.com/bwide/LegacyScrollView", from: "1.0.0")
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.

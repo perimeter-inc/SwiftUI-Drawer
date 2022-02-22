@@ -14,7 +14,7 @@ A bottom-up drawer view.
 Add a dependency in your your `Package.swift` file
 
 ```swift
-    .package(name: "Drawer", url: "https://github.com/bwide/SwiftUI-Drawer", from: "1.0.1")
+    .package(name: "Drawer", url: "https://github.com/bwide/SwiftUI-Drawer", from: "1.0.2")
 ```
 
 ## Examples

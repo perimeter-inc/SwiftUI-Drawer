@@ -18,10 +18,10 @@ public extension View {
      */
     func drawerScrollView(showsIndicators: Bool = true) -> LegacyScrollView<Self> {
         LegacyScrollView(.vertical, showsIndicators: showsIndicators) { self }
-        .onDragShouldBegin(shouldBeginDrag(with:scrollView:))
+        .onGestureShouldBegin(shouldBegingGesture(with:scrollView:))
     }
 
-    private func shouldBeginDrag(with panGestureRecognizer: UIPanGestureRecognizer, scrollView: UIScrollView) -> Bool {
+    private func shouldBegingGesture(with panGestureRecognizer: UIPanGestureRecognizer, scrollView: UIScrollView) -> Bool {
         scrollView.contentOffset.y - panGestureRecognizer.translation(in: scrollView).y > 0 // disable scrollView when scrolling down drawer
     }
 }
