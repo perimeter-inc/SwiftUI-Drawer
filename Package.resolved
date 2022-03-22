@@ -3,7 +3,7 @@
     "pins": [
       {
         "package": "LegacyScrollView",
-        "repositoryURL": "https://github.com/bwide/LegacyScrollView",
+        "repositoryURL": "https://github.com/perimeter-inc/LegacyScrollView",
         "state": {
           "branch": null,
           "revision": "8537862ddb7954cf8932b38758f0fb32fb6afdff",
