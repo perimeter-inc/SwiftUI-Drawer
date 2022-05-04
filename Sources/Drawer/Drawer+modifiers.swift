@@ -40,7 +40,8 @@ extension Drawer {
                handleHeight: handleHeight,
                backgroundColor: backgroundColor,
                willRestAt: willRestAt,
-               onDrag: onDrag)
+               onDrag: onDrag,
+               onDragEnded: onDragEnded)
     }
 
     /**
@@ -59,7 +60,8 @@ extension Drawer {
                handleHeight: handleHeight,
                backgroundColor: backgroundColor,
                willRestAt: willRestAt,
-               onDrag: onDrag)
+               onDrag: onDrag,
+               onDragEnded: onDragEnded)
     }
 
     /**
@@ -89,7 +91,8 @@ extension Drawer {
                handleHeight: height ?? handleHeight,
                backgroundColor: backgroundColor,
                willRestAt: willRestAt,
-               onDrag: onDrag)
+               onDrag: onDrag,
+               onDragEnded: onDragEnded)
     }
 
     /**
@@ -112,7 +115,8 @@ extension Drawer {
                                 handleHeight: handleHeight,
                                 backgroundColor: backgroundColor,
                                 willRestAt: willRestAt,
-                                onDrag: onDrag)
+                                onDrag: onDrag,
+                                onDragEnded: onDragEnded)
     }
 
     /**
@@ -130,7 +134,8 @@ extension Drawer {
                handleHeight: handleHeight,
                backgroundColor: color,
                willRestAt: willRestAt,
-               onDrag: onDrag)
+               onDrag: onDrag,
+               onDragEnded: onDragEnded)
     }
 
 
@@ -149,7 +154,8 @@ extension Drawer {
                handleHeight: handleHeight,
                backgroundColor: backgroundColor,
                willRestAt: willRestAt,
-               onDrag: onDrag)
+               onDrag: onDrag,
+               onDragEnded: onDragEnded)
     }
 
     /**
@@ -167,7 +173,8 @@ extension Drawer {
                handleHeight: handleHeight,
                backgroundColor: backgroundColor,
                willRestAt: willRestAt,
-               onDrag: onDrag)
+               onDrag: onDrag,
+               onDragEnded: onDragEnded)
     }
 
 

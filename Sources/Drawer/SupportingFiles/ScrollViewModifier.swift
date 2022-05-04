@@ -1,10 +1,3 @@
-//
-//  File.swift
-//  
-//
-//  Created by Bruno Wide on 16/02/22.
-//
-
 import Foundation
 import SwiftUI
 import Combine

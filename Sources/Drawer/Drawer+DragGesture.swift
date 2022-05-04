@@ -25,14 +25,14 @@ extension Drawer {
     }
 
     func dragEnded(_ value: DragGesture.Value) {
-        let newPosition =
-            lastDragPosition - value.predictedEndTranslation.height
+        let newPosition = lastDragPosition - value.predictedEndTranslation.height
         let newRestingPosition = nearest(of: newPosition)
 
         animation = .spring()
         currentPosition = newRestingPosition
         lastDragPosition = currentPosition
         willRestAt?(newRestingPosition)
+        onDragEnded?(newRestingPosition)
     }
 
     func nearest(of value: CGFloat) -> CGFloat {

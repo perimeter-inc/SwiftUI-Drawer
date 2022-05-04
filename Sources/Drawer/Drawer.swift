@@ -37,6 +37,7 @@ public struct Drawer<Content: View, Handle: View>: View {
     
     var willRestAt: ((CGFloat) -> Void)?
     var onDrag: ((CGFloat) -> Void)?
+    var onDragEnded: ((CGFloat) -> Void)?
 
     @Environment(\.safeAreaInsets) var safeAreaInsets
 
