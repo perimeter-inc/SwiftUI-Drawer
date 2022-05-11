@@ -32,7 +32,6 @@ extension Drawer {
         currentPosition = newRestingPosition
         lastDragPosition = currentPosition
         willRestAt?(newRestingPosition)
-        onDragEnded?(newRestingPosition)
     }
 
     func nearest(of value: CGFloat) -> CGFloat {
