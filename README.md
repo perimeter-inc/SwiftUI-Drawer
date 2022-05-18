@@ -14,7 +14,7 @@ A bottom-up drawer view.
 Add a dependency in your your `Package.swift` file
 
 ```swift
-    .package(name: "Drawer", url: "https://github.com/bwide/SwiftUI-Drawer", from: "1.1.1")
+    .package(name: "Drawer", url: "https://github.com/bwide/SwiftUI-Drawer", from: "1.3.0")
 ```
 
 ## Examples
@@ -133,3 +133,17 @@ Drawer with scrollable content
         }.edgesIgnoringSafeArea(.vertical)
 ```
 
+Simple Drawer with updating currentPosition
+
+```swift
+        ZStack {
+            Color.black
+            GeometryReader {
+                Drawer(currentPosition: $pos) {
+                    EmptyView()
+                }
+                .background(color: .blue)
+                .rest(in: [135, $0.size.height])
+            }
+        }.edgesIgnoringSafeArea(.vertical)
+```

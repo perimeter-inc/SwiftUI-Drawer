@@ -20,9 +20,9 @@ public struct Drawer<Content: View, Handle: View>: View {
     /// positions where the user is enabled to interact with drawer's content
     @State internal var interactivePositions: [CGFloat]
     /// helper variable for dragging logic
-    @State internal var lastDragPosition: CGFloat
+    @State internal var lastDragPosition: CGFloat?
     /// The current height of the displayed drawer
-    @State internal var currentPosition: CGFloat
+    @Binding internal var currentPosition: CGFloat
     /// current animation applied to drawer
     @State internal var animation: Animation?
     /// corner radius aplied to drawer's corners
@@ -82,8 +82,42 @@ extension Drawer {
         self.handle = handle()
         self._restingPositions = .init(initialValue: restingPositions)
         self._interactivePositions = .init(initialValue: restingPositions)
-        self._currentPosition = .init(initialValue: restingPositions.first!)
-        self._lastDragPosition = .init(initialValue: restingPositions.first!)
+        self._currentPosition = .constant(restingPositions.first!)
+        self._lastDragPosition = .init(initialValue: nil)
+        self._cornerRadius = .constant(16)
+        self.handlePadding = 10
+        self.handleHeight = 6
+        self.backgroundColor = .clear
+    }
+    
+    /**
+     A bottom-up drawer view with a custom handle
+     - Parameters:
+        - restingPositions: positions where the drawer rests
+        - currentPosition: a binding that allows you to modify the drawer's current position
+        - handle: representing the handle of a drawer, this sits on top of the drawer view and moves with it
+
+      - Example:
+     ```
+     Drawer({
+         Color.blue
+     }, handle: {
+         DrawerHandles.defaultHandle
+     })
+     ```
+     */
+    public init(
+        restingPositions: [CGFloat] = [100],
+        currentPosition: Binding<CGFloat>,
+        @ViewBuilder _ content: () -> Content,
+        @ViewBuilder handle: () -> Handle
+    ) {
+        self.content = content()
+        self.handle = handle()
+        self._restingPositions = .init(initialValue: restingPositions)
+        self._interactivePositions = .init(initialValue: restingPositions)
+        self._currentPosition = currentPosition
+        self._lastDragPosition =  .init(initialValue: nil)
         self._cornerRadius = .constant(16)
         self.handlePadding = 10
         self.handleHeight = 6
@@ -97,5 +131,20 @@ extension Drawer {
     @ViewBuilder _ content: () -> Content) where Handle == EmptyView {
         self.init(restingPositions: restingPositions,
                   content, handle: { EmptyView() })
+    }
+    
+    /// A bottom-up drawer view with no handle
+    /// - Parameters:
+    ///    - restingPositions: positions where the drawer rests
+    public init(
+        restingPositions: [CGFloat] = [0],
+        currentPosition: Binding<CGFloat>,
+        @ViewBuilder _ content: () -> Content
+    ) where Handle == EmptyView {
+        self.init(restingPositions: restingPositions,
+                  currentPosition: currentPosition,
+                  content,
+                  handle: { EmptyView() }
+        )
     }
 }
