@@ -17,20 +17,23 @@ extension Drawer {
     }
 
     func dragChanged(_ value: DragGesture.Value) {
-        let newPosition = lastDragPosition - value.translation.height
-
-        onDrag?(currentPosition)
+        if lastDragPosition == nil { lastDragPosition = currentPosition }
+        guard let lastPosition = lastDragPosition else { return }
+        
         animation = .none
-        currentPosition = newPosition
+        currentPosition = lastPosition - value.translation.height
+        onDrag?(currentPosition)
     }
 
     func dragEnded(_ value: DragGesture.Value) {
-        let newPosition = lastDragPosition - value.predictedEndTranslation.height
-        let newRestingPosition = nearest(of: newPosition)
+        guard let lastPosition = lastDragPosition else { return }
+        
+        let newRestingPosition = nearest(of: lastPosition - value.predictedEndTranslation.height)
 
+        lastDragPosition = nil
+        
         animation = .spring()
         currentPosition = newRestingPosition
-        lastDragPosition = currentPosition
         willRestAt?(newRestingPosition)
     }
 
